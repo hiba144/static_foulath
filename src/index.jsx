@@ -30,7 +30,7 @@ import '@fontsource/public-sans/700.css';
 // project import
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-
+import './index.css';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 // ==============================|| MAIN - REACT DOM RENDER ||============================== //

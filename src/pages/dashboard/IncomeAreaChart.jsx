@@ -6,8 +6,6 @@ import { useTheme } from '@mui/material/styles';
 
 // third-party
 import ReactApexChart from 'react-apexcharts';
-
-// chart options
 const areaChartOptions = {
   chart: {
     height: 450,
@@ -41,7 +39,7 @@ export default function IncomeAreaChart({ slot }) {
   useEffect(() => {
     setOptions((prevState) => ({
       ...prevState,
-      colors: [theme.palette.primary.main, theme.palette.primary[700]],
+      colors: [theme.palette.primary.main, theme.palette.primary[700], theme.palette.secondary.main],
       xaxis: {
         categories:
           slot === 'month'
@@ -94,19 +92,90 @@ export default function IncomeAreaChart({ slot }) {
       data: [0, 43, 14, 56, 24, 105, 68]
     }
   ]);
-
-  useEffect(() => {
-    setSeries([
-      {
-        name: 'Page Views',
-        data: slot === 'month' ? [76, 85, 101, 98, 87, 105, 91, 114, 94, 86, 115, 35] : [31, 40, 28, 51, 42, 109, 100]
+  useEffect(()=>{
+   const fetchData = async () => {
+    try {
+      const res = await fetch('http://localhost:4000/dashbord/cart?sortby='+slot,
+      {method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
       },
-      {
-        name: 'Sessions',
-        data: slot === 'month' ? [110, 60, 150, 35, 60, 36, 26, 45, 65, 52, 53, 41] : [11, 32, 45, 32, 34, 52, 41]
+    }
+      );
+      const data = await res.json();
+      setSeries([
+          {
+          name:'Admin Number',
+          data: data.AdminsCount,
+          },
+          {
+          name:'User Number',
+          data: data.UsersCount
+          },
+          {name :'Video Number',
+          data: data.VideosCount
+          }
+          
+      ]   
+    )
+    setOptions((prevState) => ({
+      ...prevState,
+      colors: [theme.palette.primary.main, theme.palette.primary[700] ],
+      xaxis: {
+        categories:data.date,
+        labels: {
+          style: {
+            colors: [
+              secondary,
+              secondary,
+              secondary,
+              secondary,
+              secondary,
+              secondary,
+              secondary,
+              secondary,
+              secondary,
+              secondary,
+              secondary,
+              secondary
+            ]
+          }
+        },
+        axisBorder: {
+          show: true,
+          color: line
+        },
+        tickAmount: slot === 'month' ? 11 : 7
+      },
+      yaxis: {
+        labels: {
+          style: {
+            colors: [secondary]
+          }
+        }
+      },
+      grid: {
+        borderColor: line
       }
-    ]);
-  }, [slot]);
+    }));
+    } catch (error) {
+     setSeries([
+    {
+      name: 'Videos',
+      data: [0, 43, 14, 56, 24, 105, 68]
+    },
+    {
+      name: 'Users',
+      data: [0, 43, 14, 56, 24, 105, 68]
+    },
+    {
+      name: 'Admins',
+      data: [0, 43, 14, 56, 24, 105, 68]
+    }]);}
+    }
+    fetchData();
+
+  },[slot])
 
   return <ReactApexChart options={options} series={series} type="area" height={450} />;
 }

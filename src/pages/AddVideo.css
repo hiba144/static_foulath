@@ -1,0 +1,63 @@
+.oijoijooij{
+    background-color: rgb(255, 0, 140);
+    padding: 1em 2em;
+    border-radius: 1em;
+    font-size: 1em;
+    font-weight:600;
+    cursor: pointer;
+    color: white;
+    &:hover{
+        background-color: rgb(160, 4, 90);
+    }
+}
+.uihuhu{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1em;
+    width: 100%;
+    & .noiiinooiji4555o{
+        background-color: rgb(255, 230, 0);
+        padding: 1em 2em;
+        border-radius: 1em;
+        font-size: 1em;
+        font-weight:600;
+        cursor: pointer;
+        color: black;
+        &:hover{
+            background-color: rgb(255, 230, 0);
+        }
+    }
+    & .noiiinooijio{
+        background-color: rgb(255, 0, 140);
+        padding: 1em 2em;
+        border-radius: 1em;
+        font-size: 1em;
+        font-weight:600;
+        cursor: pointer;
+        color: white;
+        &:hover{
+            background-color: rgb(160, 4, 90);
+        }
+    }
+}
+@media print{
+.simplebar-wrapper{display: none;} 
+.uihuhu{display: none;}
+
+.MuiToolbar-root ,.MuiToolbar-gutters ,.MuiToolbar-regular ,.css-13n62e0-MuiToolbar-root{
+    display: none;
+}
+.qr-code-container{
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index:10000000000000000000000000000000000000000000;
+    top:0;
+    left: 0;
+}
+}

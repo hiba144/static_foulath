@@ -26,6 +26,7 @@ import { strengthColor, strengthIndicator } from 'utils/password-strength';
 // assets
 import EyeOutlined from '@ant-design/icons/EyeOutlined';
 import EyeInvisibleOutlined from '@ant-design/icons/EyeInvisibleOutlined';
+import { Alert, AlertTitle } from '@mui/material';
 
 // ============================|| JWT - REGISTER ||============================ //
 
@@ -48,89 +49,77 @@ export default function AuthRegister() {
   useEffect(() => {
     changePassword('');
   }, []);
+  const [openAlert, setOpenAlert] = useState(false);  
 
   return (
     <>
       <Formik
         initialValues={{
-          firstname: '',
-          lastname: '',
+          name: '',
           email: '',
-          company: '',
           password: '',
           submit: null
         }}
         validationSchema={Yup.object().shape({
-          firstname: Yup.string().max(255).required('First Name is required'),
-          lastname: Yup.string().max(255).required('Last Name is required'),
+          name: Yup.string().max(255).required('First Name is required'),
           email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
           password: Yup.string().max(255).required('Password is required')
         })}
+        onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+          try {
+           const response = await fetch('http://localhost:4000/admin/add', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(values)
+          });
+          const data = await response.json();
+          if(data.success)
+            {
+              setOpenAlert(true);
+              setStatus({ success: true });
+              setSubmitting(false);
+              console.log(data);
+            }
+            else
+            {
+             
+              setStatus({ success: false });
+              setSubmitting(false);
+              console.log(data);
+            }
+          } catch (err) {
+            console.error(err);
+            setStatus({ success: false });
+            setErrors({ submit: err.message });
+            setSubmitting(false);
+           
+          }
+        }
+      }
       >
         {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit}>
             <Grid container spacing={3}>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} md={12}>
                 <Stack spacing={1}>
-                  <InputLabel htmlFor="firstname-signup">First Name*</InputLabel>
+                  <InputLabel htmlFor="name-signup">Admin Name*</InputLabel>
                   <OutlinedInput
-                    id="firstname-login"
-                    type="firstname"
-                    value={values.firstname}
-                    name="firstname"
+                    id="name-login"
+                    type="name"
+                    value={values.name}
+                    name="name"
                     onBlur={handleBlur}
                     onChange={handleChange}
                     placeholder="John"
                     fullWidth
-                    error={Boolean(touched.firstname && errors.firstname)}
+                    error={Boolean(touched.name && errors.name)}
                   />
                 </Stack>
-                {touched.firstname && errors.firstname && (
-                  <FormHelperText error id="helper-text-firstname-signup">
-                    {errors.firstname}
-                  </FormHelperText>
-                )}
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Stack spacing={1}>
-                  <InputLabel htmlFor="lastname-signup">Last Name*</InputLabel>
-                  <OutlinedInput
-                    fullWidth
-                    error={Boolean(touched.lastname && errors.lastname)}
-                    id="lastname-signup"
-                    type="lastname"
-                    value={values.lastname}
-                    name="lastname"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    placeholder="Doe"
-                    inputProps={{}}
-                  />
-                </Stack>
-                {touched.lastname && errors.lastname && (
-                  <FormHelperText error id="helper-text-lastname-signup">
-                    {errors.lastname}
-                  </FormHelperText>
-                )}
-              </Grid>
-              <Grid item xs={12}>
-                <Stack spacing={1}>
-                  <InputLabel htmlFor="company-signup">Company</InputLabel>
-                  <OutlinedInput
-                    fullWidth
-                    error={Boolean(touched.company && errors.company)}
-                    id="company-signup"
-                    value={values.company}
-                    name="company"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    placeholder="Demo Inc."
-                    inputProps={{}}
-                  />
-                </Stack>
-                {touched.company && errors.company && (
-                  <FormHelperText error id="helper-text-company-signup">
-                    {errors.company}
+                {touched.name && errors.name && (
+                  <FormHelperText error id="helper-text-name-signup">
+                    {errors.name}
                   </FormHelperText>
                 )}
               </Grid>
@@ -234,6 +223,22 @@ export default function AuthRegister() {
           </form>
         )}
       </Formik>
+      {openAlert&&
+      <div 
+      style={{position:'fixed',top:'0',left:'0',width:'100%',height:'100%',zIndex:'100',display:'flex',justifyContent:'center',alignItems:'center',backgroundColor:'rgba(0,0,0,0.5)'}}
+      onClick={()=>setOpenAlert(false)}
+      >
+        <Alert sx={{
+          width:'50%',
+          height:'15%',
+          fontSize:'1.5rem', 
+          color:'white',       
+        }} variant="filled" severity="success">
+      <AlertTitle>Success</AlertTitle>
+        Admin Added Successfully
+
+</Alert>
+        </div>}
     </>
   );
 }

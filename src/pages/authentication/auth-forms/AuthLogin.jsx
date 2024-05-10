@@ -51,10 +51,44 @@ export default function AuthLogin({ isDemo = false }) {
           password: '',
           submit: null
         }}
+        
+        
         validationSchema={Yup.object().shape({
           email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
           password: Yup.string().max(255).required('Password is required')
         })}
+        onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+
+          try {
+            const response = await fetch('http://localhost:4000/admin/login', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(values)
+          });
+            const data = await response.json()
+            console.log(data)
+            if (data.success) {
+              setStatus({ success: true });
+              setSubmitting(false);
+              localStorage.setItem('token', data.token);  
+              localStorage.setItem('user', JSON.stringify(data.user));
+              window.location.href = '/Elfoulath/dashboard/default';
+            }
+            else {
+              setErrors({ submit: data.message });
+              setSubmitting(false);
+            }
+           
+          } catch (error) {
+            console.error(error);
+            setStatus({ success: false });
+            setErrors({ submit: error.message });
+            setSubmitting(false);
+            
+          }
+        }}
       >
         {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit}>
@@ -117,21 +151,6 @@ export default function AuthLogin({ isDemo = false }) {
 
               <Grid item xs={12} sx={{ mt: -1 }}>
                 <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={checked}
-                        onChange={(event) => setChecked(event.target.checked)}
-                        name="checked"
-                        color="primary"
-                        size="small"
-                      />
-                    }
-                    label={<Typography variant="h6">Keep me sign in</Typography>}
-                  />
-                  <Link variant="h6" component={RouterLink} color="text.primary">
-                    Forgot Password?
-                  </Link>
                 </Stack>
               </Grid>
               {errors.submit && (
@@ -147,12 +166,6 @@ export default function AuthLogin({ isDemo = false }) {
                 </AnimateButton>
               </Grid>
               <Grid item xs={12}>
-                <Divider>
-                  <Typography variant="caption"> Login with</Typography>
-                </Divider>
-              </Grid>
-              <Grid item xs={12}>
-                <FirebaseSocial />
               </Grid>
             </Grid>
           </form>
