@@ -8,10 +8,17 @@ import Typography from '@mui/material/Typography';
 // project import
 import AuthWrapper from './AuthWrapper';
 import AuthLogin from './auth-forms/AuthLogin';
+import { useEffect } from 'react';
 
 // ================================|| LOGIN ||================================ //
 
 export default function Login() {
+  ///pour logout bach yfasa5 l token mn local storage
+  ///useEffect bach ydir remove l token mn local storage
+  useEffect(() => {
+  localStorage.removeItem('token')
+  } 
+  , []);
   return (
     <AuthWrapper>
       <Grid container spacing={3}>

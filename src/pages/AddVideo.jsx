@@ -2,14 +2,17 @@ import React from 'react'
 import './AddVideo.css'
 import { set } from 'lodash'
 import QRCode from 'qrcode.react';
+import { CircularProgress } from '@mui/material';
 function AddVideo() {
   const[video, setVideo] = React.useState(null)
   const [afficher_qr_code, setAfficher_qr_code] = React.useState(false)
   const [qr_code, setQr_code] = React.useState('')
+  const [openProgress, setOpenProgress] = React.useState(false)
   const saveVideo = async () => {
    try {
     const formData = new FormData()
     formData.append('video', video)
+    setOpenProgress(true)
    const respance = await fetch('http://localhost:4000/video/addVideo_from_admin', {
       method: 'POST',
       body: formData
@@ -25,13 +28,23 @@ function AddVideo() {
     console.log(error)
     
    }
+    setOpenProgress(false)
   }
   const  printQrCode = () => {
     window.print()
   }
 
   return (
-    <div>
+  
+    <>
+     {
+        openProgress && (
+          <div className='progress-container'>
+            <CircularProgress />
+          </div>
+        )
+     }
+      <div>
      <input type='file' 
       style={{display: 'none'}}
       id='fileInput'
@@ -68,6 +81,7 @@ function AddVideo() {
 
 
     </div>
+    </>
 
   )
 }

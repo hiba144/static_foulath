@@ -61,3 +61,33 @@
     left: 0;
 }
 }
+.videos546488{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 1em;
+    padding: 1em;
+}
+.DleateVideo{
+    background-color: rgb(255, 0, 140);
+    padding: 1em 2em;
+    border-radius: 1em;
+    font-size: 1em;
+    font-weight:600;
+    cursor: pointer;
+    color: white;
+    &:hover{
+        background-color: rgb(160, 4, 90);
+    }
+
+}
+.videocart{
+    width: 400px;
+    background-color: white;
+    padding: 1em;
+    border-radius: 1em;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    & video{
+        width: 100%;
+        border-radius: 1em;
+    }
+}

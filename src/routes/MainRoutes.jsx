@@ -1,9 +1,11 @@
-import { lazy } from 'react';
+import { lazy, useEffect } from 'react';
 
 // project import
 import Loadable from 'components/Loadable';
 import Dashboard from 'layout/Dashboard';
 import AddVideo from 'pages/AddVideo';
+import AllVideo from 'pages/AllVideo';
+import Login from 'pages/authentication/login';
 
 const Color = Loadable(lazy(() => import('pages/component-overview/color')));
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard/index')));
@@ -12,13 +14,20 @@ const DashboardDefault = Loadable(lazy(() => import('pages/dashboard/index')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
+  const token = localStorage.getItem('token');
+  // itha l token mawjoud f local storage ydir redirect lel dashboard w itha makan mawjoud ydir redirect lel login
+
 const MainRoutes = {
   path: '/',
-  element: <Dashboard />,
+  element: token ? <Dashboard />:<Login />,
   children: [
     {
       path: '/',
       element: <DashboardDefault />
+    },
+    {
+      path: 'AllVideo',
+      element: <AllVideo />
     },
     {
       path: 'addVideo',

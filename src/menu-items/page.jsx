@@ -1,28 +1,23 @@
 // assets
-import { LoginOutlined, ProfileOutlined,VideoCameraAddOutlined } from '@ant-design/icons';
+import { LoginOutlined, ProfileOutlined,VideoCameraAddOutlined ,VideoCameraOutlined} from '@ant-design/icons';
+import { on } from 'process';
 
 // icons
 const icons = {
   LoginOutlined,
   ProfileOutlined,
-  VideoCameraAddOutlined 
+  VideoCameraAddOutlined ,
+  VideoCameraOutlined
 };
 
 // ==============================|| MENU ITEMS - EXTRA PAGES ||============================== //
 
 const pages = {
   id: 'authentication',
-  title: 'Authentication',
+  title: 'Extra Pages',
   type: 'group',
   children: [
-    {
-      id: 'login1',
-      title: 'Logout',
-      type: 'item',
-      url: '/login',
-      icon: icons.LoginOutlined,
-      target: true
-    },
+   
     {
       id: 'addVideo',
       title: 'Add Video',
@@ -32,12 +27,28 @@ const pages = {
       target: false
     },
     {
+      id: 'allVideo',
+      title: 'All Video',
+      type: 'item',
+      url: '/allVideo',
+      icon:icons.VideoCameraOutlined  ,
+      target: false
+    },
+    {
       id: 'register1',
       title: 'Add Admin',
       type: 'item',
       url: '/register',
       icon: icons.ProfileOutlined,
-      target: true
+      target:false
+    },
+    {
+      id: 'login1',
+      title: 'Logout',
+      type: 'item',
+      url: '/login',
+      icon: icons.LoginOutlined,
+      target: false
     }
 
   ]
